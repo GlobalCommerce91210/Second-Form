@@ -1,0 +1,71 @@
+// app/page.tsx
+
+"use client";
+import { useState } from "react";
+import { getRecommendation } from "../lib/engine";
+
+export default function Home() {
+  const [age, setAge] = useState(45);
+
+  return (
+    <div style={{ background: "#0B1F3B", color: "white", minHeight: "100vh", padding: 40 }}>
+
+      {/* HERO */}
+      <h1 style={{ fontSize: 48, fontWeight: 700 }}>
+        Legecii Insurance Group
+      </h1>
+
+      <p style={{ color: "#94A3B8" }}>
+        AI-powered insurance clarity for every life stage
+      </p>
+
+      {/* INPUT */}
+      <div style={{ marginTop: 40 }}>
+        <input
+          type="range"
+          min="18"
+          max="80"
+          value={age}
+          onChange={(e) => setAge(parseInt(e.target.value))}
+        />
+        <p>Age: {age}</p>
+      </div>
+
+      {/* OUTPUT CARD */}
+      <div style={{
+        marginTop: 40,
+        padding: 20,
+        background: "#102A56",
+        borderRadius: 16,
+        border: "1px solid #F97316"
+      }}>
+        <h2 style={{ color: "#F97316" }}>Recommended Plan</h2>
+        <p>{getRecommendation(age)}</p>
+      </div>
+
+      {/* BUTTONS */}
+      <div style={{ marginTop: 30, display: "flex", gap: 10 }}>
+        <button style={{ background: "#F97316", padding: 12 }}>
+          Elder Mode
+        </button>
+        <button style={{ background: "#1E3A8A", padding: 12 }}>
+          Investor Demo
+        </button>
+      </div>
+    </div>
+  );
+}
+{
+  "age": 67,
+  "income": "low",
+  "state": "GA"
+}
+{
+  "program": "Medicare",
+  "confidence": 0.92
+}
+export function routeUser(age: number, income: string) {
+  if (age >= 65) return "MEDICARE";
+  if (income === "low") return "DFCS_REFERRAL";
+  return "GEORGIA_ACCESS_ACA";
+}

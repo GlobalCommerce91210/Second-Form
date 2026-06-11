@@ -1,0 +1,141 @@
+import axios from 'axios';
+
+function QuoteForm() {
+  const getQuote = async () => {
+    const res = await axios.post('/api/quote', { age: 30 });
+    console.log(res.data);
+  };
+
+  return <button onClick={getQuote}>Get Quote</button>;
+}
+const express = require('express');
+const router = express.Router();
+const { getQuote } = require('../controllers/quoteController');
+
+router.post('/quote', getQuote);
+
+module.exports = router;
+exports.getQuote = (req, res) => {
+  const age = req.body.age;
+
+  let plan;
+  if (age < 40) {
+    plan = "Basic ACA Plan";
+  } else {
+    plan = "Premium Plan";
+  }
+
+  res.json({ plan });
+};
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+const quoteRoutes = require('./routes/quoteRoutes');
+app.use('/api', quoteRoutes);
+
+app.listen(5000, () => console.log('Server running'));
+insurance-lead-engine/
+│
+├── frontend/              # React app (lead capture UI)
+│   ├── src/
+│   │   ├── components/
+│   │   │   └── QuoteForm.jsx
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── package.json
+│
+├── backend/               # Node/Express API
+│   ├── controllers/
+│   │   └── leadController.js
+│   ├── routes/
+│   │   └── leadRoutes.js
+│   ├── models/
+│   │   └── Lead.js
+│   ├── server.js
+│   └── package.json
+│
+├── database/
+│   └── schema.sql
+│
+├── .env
+├── docker-compose.yml
+└── README.md
+const express = require('express');
+const app = express();
+const leadRoutes = require('./routes/leadRoutes');
+
+app.use(express.json());
+app.use('/api/leads', leadRoutes);
+
+app.listen(5000, () => console.log('API running on port 5000'));
+const router = require('express').Router();
+const { createLead } = require('../controllers/leadController');
+
+router.post('/', createLead);
+
+module.exports = router;
+exports.createLead = (req, res) => {
+  const { name, age, income } = req.body;
+
+  let plan = age < 40 ? "ACA Basic" : "ACA Premium";
+
+  // Normally you'd save to DB here
+  console.log({ name, age, income, plan });
+
+  res.json({
+    success: true,
+    recommendedPlan: plan
+  });
+};
+import { useState } from 'react';
+import axios from 'axios';
+
+export default function QuoteForm() {
+  const [form, setForm] = useState({ name: '', age: '', income: '' });
+
+  const submit = async () => {
+    const res = await axios.post('/api/leads', form);
+    alert(`Recommended: ${res.data.recommendedPlan}`);
+  };
+
+  return (
+    <div>
+      <input placeholder="Name" onChange={e => setForm({...form, name: e.target.value})} />
+      <input placeholder="Age" onChange={e => setForm({...form, age: e.target.value})} />
+      <input placeholder="Income" onChange={e => setForm({...form, income: e.target.value})} />
+      <button onClick={submit}>Get Quote</button>
+    </div>
+  );
+}
+CREATE TABLE leads (
+  id SERIAL PRIMARY KEY,
+  name TEXT,
+  age INT,
+  income INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+version: '3'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+git clone https://github.com/yourname/insurance-lead-engine
+cd insurance-lead-engine
+
+# Run backend
+cd backend
+npm install
+node server.js
+
+# Run frontend (new terminal)
+cd frontend
+npm install
+npm run dev

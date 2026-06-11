@@ -1,0 +1,29 @@
+insurance-app/
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   │   └── QuoteForm.js
+│   │   ├── pages/
+│   │   │   └── Home.js
+│   │   ├── App.js
+│   │   └── index.js
+│   └── package.json
+│
+├── backend/
+│   ├── controllers/
+│   │   └── quoteController.js
+│   ├── routes/
+│   │   └── quoteRoutes.js
+│   ├── models/
+│   │   └── User.js
+│   ├── server.js
+│   └── package.json
+│
+├── database/
+│   └── schema.sql
+│
+├── .env
+├── README.md
+└── docker-compose.yml
